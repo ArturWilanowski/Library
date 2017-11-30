@@ -1,37 +1,36 @@
 package Library;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-    new Main();
+        new Main();
     }
 
     private Scanner scanner;
     private List<Book> bookList;
 
-
-    public Main(){
+    public Main() {
         scanner = new Scanner(System.in);
-        Utils.parseBooksFromFile(Paths.get("books.txt"));
+        bookList = Utils.parseBooksFromFile(Paths.get("book.txt"));
         start();
     }
 
+
     private void start(){
-        System.out.println("Witaj w bibliotece!");
+        System.out.println("Witaj w mojej bibliotece!");
 
         String command;
         do{
-            System.out.println("1 - Dodawanie książki");
-            System.out.println("2 - Wypozyczenie książki");
-            System.out.println("3 - Oddaj książkę");
-            System.out.println("4 - Wyświetl wolne pozycje");
+            System.out.println("1 - Dodawanie ksiazki");
+            System.out.println("2 - Wypozyczenie ksiazki");
+            System.out.println("3 - Oddawanie ksiazki");
+            System.out.println("4 - Wyswietl wolne pozycje");
 
-            System.out.println("Wpisz polecenie: ");
+            System.out.print("Wpisz polecenie: ");
             command = scanner.nextLine();
             parseChoice(command);
 
@@ -40,11 +39,15 @@ public class Main {
 
     private void parseChoice(String command) {
         switch (command){
-            case "1": {
+            case "4": {
+                showFreeBooks();
+                break;
+            }
+            case "1":{
                 addBook();
                 break;
             }
-            case "2": {
+            case "2":{
                 rentBook();
                 break;
             }
@@ -52,12 +55,8 @@ public class Main {
                 bringBackBook();
                 break;
             }
-            case "4": {
-               showFreeBooks();
-                break;
-            }
             case "exit":{
-
+                Utils.saveBooksToFile(Paths.get("book.txt"), bookList);
                 break;
             }
             default: {
@@ -67,67 +66,69 @@ public class Main {
     }
 
     private void bringBackBook() {
-        System.out.println("Podaj nazwę książki, którą chcesz zwrócić: ");
+        System.out.print("Podaj nazwę książki, którą chcesz zwrócić: ");
         String name = scanner.nextLine();
 
         for (Book book : bookList) {
-            if (book.getName().equalsIgnoreCase(name) && book.getRentStatus() == 1) {
+            if(book.getName().equalsIgnoreCase(name) && book.getRentStatus() == 1){
                 book.setRentStatus(0);
-                System.out.println("Dięki za zwrócenie książki");
+                System.out.println("Dzięki za zwrócenie książki");
                 return;
             }
         }
-        System.out.println("Taka książka nie jest wypożyczona, lub nie istnieje!");
+        System.out.println("Taka ksiazka nie jest wypozyczona, lub nie istnieje!");
+
     }
 
     private void rentBook() {
-        System.out.println("Podaj nazwę książki, którą chcesz wypożyczyć: ");
+        System.out.print("Podaj nazwę książki, którą chcesz wypożyczyć: ");
         String name = scanner.nextLine();
 
-        for (Book book : bookList){
-            if (book.getName().equalsIgnoreCase(name) && book.getRentStatus() == 0){
+        for (Book book : bookList) {
+            if(book.getName().equalsIgnoreCase(name) && book.getRentStatus() == 0){
                 book.setRentStatus(1);
                 System.out.println("Wypożyczono książkę " + book.getName());
                 System.out.println("Oddaj jak tylko przeczytasz!");
                 return;
             }
         }
-        System.out.println("Nie mamy takiej książki na stanie!");
+        System.out.println("Nie mamy takiej ksiazki na stanie!");
     }
 
     private void addBook() {
-        System.out.println("Dodajesz nową książkę!");
+        System.out.println("Dodajesz nową książke!");
 
         String title, author;
         int pages, produceYear;
 
-        System.out.println("Tytuł: ");
+        System.out.print("Tytuł: ");
         title = scanner.nextLine();
 
         for (Book book : bookList) {
-            if (book.getName().equalsIgnoreCase(title)){
-                System.out.println("Taka książka już istnieje!");
+            if(book.getName().equalsIgnoreCase(title)){
+                System.out.println("Taka ksiazka juz istnieje!");
                 return;
             }
         }
 
-        System.out.println("Autor: ");
+        System.out.print("Autor: ");
         author = scanner.nextLine();
 
-        System.out.println("Ilość stron: ");
+        System.out.print("Ilość stron: ");
         pages = Integer.parseInt(scanner.nextLine());
 
-        System.out.println("Rok wydania: ");
+        System.out.print("Rok wydania: ");
         produceYear = Integer.parseInt(scanner.nextLine());
 
         bookList.add(new Book(title, author, pages, produceYear, 0));
-        System.out.println("Dodano książkę " + title);
+        System.out.println("Dodano książke " + title);
+
     }
 
-        private void showFreeBooks() {
-            for (Book book : bookList){
-            if (book.getRentStatus() == 0){
-            System.out.println("Wolna pozycja: " + book.getName());
+    private void showFreeBooks() {
+        for (Book book : bookList) {
+            if(book.getRentStatus() == 0){
+                System.out.println("Wolna pozycja: " + book.getName());
             }
         }
     }

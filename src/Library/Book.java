@@ -57,5 +57,8 @@ public class Book {
     }
 
 
-
+    @Override
+    public String toString() {
+        return name + ":" + author + ":" + pages + ":" + produceYear + ":" + rentStatus;
+    }
 }

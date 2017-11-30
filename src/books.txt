@@ -1,0 +1,4 @@
+Programowanie: Artur:200:2017:0
+Java:Wojetek:250:2002:1
+Gotowanko:Andrzej:112:2003:1
+Scrum:Marian:75:2008:0
